@@ -23,6 +23,16 @@ public static int Menu(int opcion)
     } while(opcion<0 || opcion>5);
     return opcion;
 } 
+public static DateTime IngresarFecha(string msj)
+    {
+        DateTime fechaDate;
+        string fecha_ingresada = IngresarTexto(msj);
+        while (!DateTime.TryParse(fecha_ingresada, out fechaDate))
+        {
+            fecha_ingresada = IngresarTexto("ERROR! " + msj);
+        }
+        return fechaDate;
+    }
 }
 
 
