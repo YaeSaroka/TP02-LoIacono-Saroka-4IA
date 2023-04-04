@@ -1,20 +1,22 @@
 ﻿using System.Collections.Generic;
 Dictionary<string, Persona> DiccionarioPersonas = new Dictionary<string, Persona>();
- int cont_personas=0,contador_personas_votar=0, opcion = 0;
+ int cont_personas=0,contador_personas_votar=0, opcion = 0, edad=0;
  double total_edades=0, promedio=0;
+ string dni_buscado="", email_nuevo="";
 
 while(opcion!=5)
 {
+    
     opcion=Funciones.Menu(opcion);
+    Console.Clear();
 switch(opcion)
 {
     case 1:
         AgregarPersona();
     break;
-
     case 2:
     VerEstadisticas(ref promedio, ref cont_personas, ref contador_personas_votar);
-    if(cont_personas>1)
+    if(cont_personas>=1)
     {
         Console.WriteLine("Estadísticas del censo: ");
         Console.WriteLine($"Cantidad de personas {cont_personas}");
@@ -25,13 +27,17 @@ switch(opcion)
     {
         Console.WriteLine("Aún no se ingresaron personas en la lista");
     }
-   
     break;
-
     case 3:
+    dni_buscado=Funciones.IngresarTexto("Ingrese el DNI que desea buscar: ");
+    BuscarPersona(dni_buscado);
+    break;
+    case 4:
+    ModificarMail(dni_buscado,email_nuevo);
     break;
 }
 }
+
 
 void AgregarPersona()
 {
@@ -45,22 +51,38 @@ void AgregarPersona()
     Persona UnaPersona = new Persona(dni,surname,name,fn,mail);
     DiccionarioPersonas.Add(dni,UnaPersona);
     Console.WriteLine($"Se ha creado la persona {name} {surname} y se ha agregado a la lista");
-    
-
 }
-
-void VerEstadisticas(ref double promedio, ref int cont_personas, ref int contador_personas_votar)
+void BuscarPersona(string dni_buscado)
+{
+    foreach(string dni_clave in DiccionarioPersonas.Keys)
+    {
+        if(dni_clave==dni_buscado)
+        {
+            foreach(Persona item in DiccionarioPersonas.Values)
+            {
+                Console.WriteLine( " Nombre: " +item.Nombre + " Apellido: " + item.Apellido + " Fecha de Nacimiento: "+item.FechaNacimiento+ " Email: " +item.Email+" Edad: "+ CalcularEdad(item.FechaNacimiento, ref edad) );
+            }
+        }
+    }
+}
+static int CalcularEdad(DateTime fecha_nacimiento, ref int edad)
 {
     DateTime fechaActual = DateTime.Today;
+     edad = fechaActual.Year - fecha_nacimiento.Year;
+     if (fecha_nacimiento.Month > fechaActual.Month)
+    {
+        --edad;
+    }
+    return edad;
+}
+void VerEstadisticas(ref double promedio, ref int cont_personas, ref int contador_personas_votar)
+{
+    
     foreach(Persona item in DiccionarioPersonas.Values )
     {
         cont_personas++;
-        int edad = fechaActual.Year - item.FechaNacimiento.Year;
-         if (item.FechaNacimiento.Month > fechaActual.Month)
-        {
-            --edad;
-            total_edades+=edad;
-        }
+        int edad_= CalcularEdad(item.FechaNacimiento, ref edad);
+         total_edades+=edad;
         if(edad>=16)
         {
             contador_personas_votar++;
@@ -68,8 +90,20 @@ void VerEstadisticas(ref double promedio, ref int cont_personas, ref int contado
         promedio=total_edades/cont_personas;
     }
 }
-
-
+void ModificarMail(string dni_buscado, string email_nuevo)
+{
+    dni_buscado=Funciones.IngresarTexto("Ingrese el DNI que desea cambiar el mail: ");
+    if(DiccionarioPersonas.ContainsKey(dni_buscado))
+    {
+        email_nuevo=Funciones.IngresarTexto("Ingrese el nuevo mail: ");
+        Persona usuario=DiccionarioPersonas[dni_buscado];
+        usuario.Email = email_nuevo;
+    }
+    else
+    {
+        Console.WriteLine("No se encontró el DNI solicitado");
+    }
+} 
 void ValidarDNI(ref string dni)
 {
     while(dni.Length<8 || dni.Length>8)
