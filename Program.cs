@@ -6,7 +6,6 @@ Dictionary<string, Persona> DiccionarioPersonas = new Dictionary<string, Persona
 
 while(opcion!=5)
 {
-    
     opcion=Funciones.Menu(opcion);
     Console.Clear();
 switch(opcion)
@@ -38,7 +37,6 @@ switch(opcion)
 }
 }
 
-
 void AgregarPersona()
 {
     string dni = Funciones.IngresarTexto("Ingrese su DNI: ");
@@ -54,16 +52,8 @@ void AgregarPersona()
 }
 void BuscarPersona(string dni_buscado)
 {
-    foreach(string dni_clave in DiccionarioPersonas.Keys)
-    {
-        if(dni_clave==dni_buscado)
-        {
-            foreach(Persona item in DiccionarioPersonas.Values)
-            {
-                Console.WriteLine( " Nombre: " +item.Nombre + " Apellido: " + item.Apellido + " Fecha de Nacimiento: "+item.FechaNacimiento+ " Email: " +item.Email+" Edad: "+ CalcularEdad(item.FechaNacimiento, ref edad) );
-            }
-        }
-    }
+    Persona persona_buscada= DiccionarioPersonas[dni_buscado];
+    Console.WriteLine( " Nombre: " +persona_buscada.Nombre + " Apellido: " + persona_buscada.Apellido + " Fecha de Nacimiento: "+persona_buscada.FechaNacimiento+ " Email: " +persona_buscada.Email+" Edad: "+ CalcularEdad(persona_buscada.FechaNacimiento, ref edad) );  
 }
 static int CalcularEdad(DateTime fecha_nacimiento, ref int edad)
 {
