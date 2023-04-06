@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 Dictionary<string, Persona> DiccionarioPersonas = new Dictionary<string, Persona>();
  int cont_personas=0,contador_personas_votar=0, opcion = 0, edad=0;
  double total_edades=0, promedio=0;
@@ -37,6 +38,7 @@ switch(opcion)
 }
 }
 
+//FUNCIONES
 void AgregarPersona()
 {
     string dni = Funciones.IngresarTexto("Ingrese su DNI: ");
